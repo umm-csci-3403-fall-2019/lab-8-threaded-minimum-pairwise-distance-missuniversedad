@@ -12,6 +12,7 @@ public class ThreadTimingTest {
 
     @Test
     public void testSortingTiming() throws InterruptedException {
+
         Random random = new Random();
         MinimumPairwiseDistance serialMPD = new SerialMinimumPairwiseDistance();
         int[] serialValues = new int[NUM_VALUES];

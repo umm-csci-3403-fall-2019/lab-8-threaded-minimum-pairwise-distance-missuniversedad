@@ -35,38 +35,64 @@ public class ThreadedMinimumPairwiseDistance implements MinimumPairwiseDistance,
 
 
     public void run(){
-        for(int i=0; i<values.length; i++) {
-            int vi = values[i];
-            for(int j=0; j<values.length && j<i; j++){
-                if(shouldCompute(i, j)){
-                    int v = Math.abs(vi - values[j]);
-                    if(v < bestSoFar){
-                        bestSoFar = v;
-                    }
-                }
-            }
+        switch(quadrant + 1){
+            case 1: quad1(); break;
+            case 2: quad2(); break;
+            case 3: quad3(); break;
+            case 4: quad4(); break;
         }
-        while(!answer.getLock()) {
+        while(!answer.getLock()){
+
         }
         if(answer.getAnswer() > bestSoFar){
             answer.setAnswer(bestSoFar);
         }
         answer.dropLock();
     }
-
-    private boolean shouldCompute(int i, int j){
-        int half = values.length / 2;
-        if(i < half){
-            return quadrant == 1;
-        }else if (j >= half) {
-            return quadrant == 4;
-        }else if (j > i){
-            return quadrant == 3;
-        }else{
-            return quadrant == 2;
+    private void quad1() {
+        for (int i = 0; i < values.length / 2; i++) {
+            int vi = values[i];
+            for (int j = 0; j < values.length && j < i; j++) {
+                int v = Math.abs(vi - values[j]);
+                if(v < bestSoFar){
+                    bestSoFar = v;
+                }
+            }
         }
     }
-
+    private void quad2() {
+        for (int i = values.length / 2; i < values.length; i++) {
+            int vi = values[i];
+            for (int j = 0; j < values.length / 2 && j < (i - values.length / 2); j++) {
+                int v = Math.abs(vi - values[j]);
+                if(v < bestSoFar){
+                    bestSoFar = v;
+                }
+            }
+        }
+    }
+    private void quad3() {
+        for (int i = values.length / 2; i < values.length; i++) {
+            int vi = values[i];
+            for (int j = (i - values.length / 2); j < values.length / 2; j++) {
+                int v = Math.abs(vi - values[j]);
+                if(v < bestSoFar){
+                    bestSoFar = v;
+                }
+            }
+        }
+    }
+    private void quad4() {
+        for (int i = values.length/2; i<values.length;i++) {
+            int vi = values[i];
+            for (int j = values.length /2; j < i; j++) {
+                int v = Math.abs(vi - values[j]);
+                if(v < bestSoFar){
+                    bestSoFar = v;
+                }
+            }
+        }
+    }
     static class Answer{
         private int answer = Integer.MAX_VALUE;
 
